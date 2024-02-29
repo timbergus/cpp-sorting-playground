@@ -11,5 +11,5 @@ public:
   Sorting();
   ~Sorting();
 
-  static void bubbleSort(std::vector<int> *);
+  static void bubbleSort(std::vector<int> *, bool *);
 };

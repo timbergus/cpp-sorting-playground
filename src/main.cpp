@@ -8,6 +8,14 @@
 #include "sorting.h"
 
 std::vector<int> dataset;
+bool reset{false};
+
+Rectangle drawButton(float x, float y)
+{
+  DrawRectangle(x, y, 100, 30, BLACK);
+  DrawText("Reset", x + 20, y + 6, 20, reset ? GREEN : RED);
+  return {x, y, 100, 30};
+}
 
 int main(int, char **)
 {
@@ -27,7 +35,7 @@ int main(int, char **)
 
   // Launch the sorting algorithm that will sort the dataset every 10ms.
 
-  std::thread sorter{Sorting::bubbleSort, &dataset};
+  std::thread sorter{Sorting::bubbleSort, &dataset, &reset};
 
   // Create the screen using the dataset size (1px per sample).
 
@@ -39,12 +47,14 @@ int main(int, char **)
 
   SetTargetFPS(120);
 
+  Vector2 mousePoint = {0.0f, 0.0f};
+
   while (!WindowShouldClose())
   {
+    mousePoint = GetMousePosition();
+
     BeginDrawing();
     ClearBackground(LIGHTGRAY);
-
-    DrawFPS(10, 10);
 
     // Draw a rectangle per sample of the dataset.
 
@@ -57,6 +67,18 @@ int main(int, char **)
       int HEIGHT = item * SCALE;
 
       DrawRectangle(i * WIDTH, SCREEN_HEIGHT - HEIGHT, WIDTH, HEIGHT, BLUE);
+    }
+
+    // Draw reset button and fps.
+
+    DrawFPS(10, 50);
+
+    Rectangle rectangle = drawButton(10, 10);
+
+    if (CheckCollisionPointRec(mousePoint, rectangle) && IsMouseButtonDown(MOUSE_BUTTON_LEFT) && reset)
+    {
+      std::shuffle(dataset.begin(), dataset.end(), rng);
+      reset = false;
     }
 
     EndDrawing();

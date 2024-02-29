@@ -8,24 +8,32 @@ Sorting::~Sorting()
 {
 }
 
-void Sorting::bubbleSort(std::vector<int> *dataset)
+void Sorting::bubbleSort(std::vector<int> *dataset, bool *reset)
 {
-  bool isBeingSorted = true;
+  bool isSorted = false;
 
-  while (isBeingSorted)
+  while (true)
   {
-    isBeingSorted = false;
-
-    for (int i = 1; i < static_cast<int>(dataset->size()); i++)
+    if (!isSorted)
     {
-      if (dataset->at(i - 1) > dataset->at(i))
-      {
-        std::swap(dataset->at(i - 1), dataset->at(i));
+      isSorted = true;
 
-        isBeingSorted = true;
+      for (int i = 1; i < static_cast<int>(dataset->size()); i++)
+      {
+        if (dataset->at(i - 1) > dataset->at(i))
+        {
+          std::swap(dataset->at(i - 1), dataset->at(i));
+
+          isSorted = false;
+        }
       }
     }
+    else
+    {
+      *reset = true;
+      isSorted = false;
+    }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    std::this_thread::sleep_for(std::chrono::milliseconds(8));
   }
 }
