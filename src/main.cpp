@@ -84,15 +84,6 @@ int main(int, char **)
     EndDrawing();
   }
 
-  // If we kill the window, we kill the sorting thread.
-
-  if (WindowShouldClose())
-  {
-    sorter.detach();
-  }
-
-  sorter.join();
-
   CloseWindow();
 
   return EXIT_SUCCESS;
